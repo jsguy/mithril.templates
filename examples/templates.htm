@@ -1,0 +1,118 @@
+<html>
+<head>
+	<title></title>
+	<script src="../mithril.js"></script>
+	<script src="../mithril.sugartags.js"></script>
+	<script src="../mithril.templates.js"></script>
+	<style>
+		.hide { display: none; }
+	</style>
+</head>
+<body>
+
+<div id="content"></div>
+
+<!-- 
+	Header template (embedded) 
+
+	Pros
+	. Automatically exposes sugar tags
+
+	Cons
+	. Not as efficient as we need to parse the code
+
+-->
+<script id="listHeader" type="text/mithrill">
+	H1("Mithril templates")
+</script>
+
+<!-- 
+	Main template (embedded and defined) 
+
+	Pros
+	. Can be referenced by name later
+	. This could be defined in a different file
+	. Is easily tested
+
+	Cons
+	. Slightly verbose, when using sugartags
+-->
+<script>
+	m.template.define('list', function(data){
+		with(m.sugarTags) {
+			return DIV([
+				//	Use an embedded template for the header
+				m.template('listHeader'),
+				//	Uses a ajax loaded template
+				LABEL(m.template(data.inputTmpl(), data)),
+				UL( {class: "listy"}, [
+					data.links.map(function(link) {
+						//	Use a template function
+						return m.template(data.listItem, link);
+					})
+				])
+			]);
+		}
+	});
+</script>
+
+
+<script>
+	var app = {
+		model: {
+			links: [
+				{ href: "#", title: "Link 1", shown: m.prop(true) },
+				{ href: "#", title: "Link 2", shown: m.prop(true) },
+				{ href: "#", title: "Link 3", shown: m.prop(true) }
+			]
+		},
+		controller: function() {
+			var self = this;
+			self.links = app.model.links;
+			self.hideLinks = function(){
+				for(var i = 0; i < self.links.length; i += 1) {
+					self.links[i].shown(!self.links[i].shown());
+				}
+			};
+
+			/*
+				Inline template for list items
+
+				Pros
+				. Convenient to define as part of the app?
+
+				Cons
+				. Not as easy to test in a stand-alone manner
+			*/
+			self.listItem = function(data){
+				with(m.sugarTags) {
+					return LI({class: data.shown()?"":"hide"},
+						A({href: data.href}, data.title)
+					)
+				};
+			};
+
+			/*	
+				Remote loaded template
+
+				Pros
+				. Automatically loaded
+
+				Cons
+				. None
+			*/
+			self.inputTmpl = m.template.load("input.tmpl.js");
+		},
+		view: function(ctrl) {
+			return [
+				//	Render our defined template
+				m.template.compile('list', ctrl)
+			];
+		}
+	};
+
+	//	initialize
+	m.module(document.getElementById("content"), app);
+</script>
+</body>
+</html>

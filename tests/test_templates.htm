@@ -1,0 +1,79 @@
+<html>
+<head>
+	<title></title>
+	<script src="../mithril.js"></script>
+	<script src="../mithril.sugartags.js"></script>
+	<script src="../mithril.templates.js"></script>
+	<script src="lib/qunit.js"></script>
+	<link rel="stylesheet" type="text/css" href="lib/qunit.css">
+</head>
+<body>
+
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<!-- Header template (embedded) -->
+<script id="listHeader" type="text/mithrill">
+	H1("Mithril templates")
+</script>
+
+<!-- Main template (embedded and defined) -->
+<script>
+	m.template.define('list', function(data){
+		with(m.sugarTags) {
+			return DIV([
+				//	Use an embedded template for the header
+				m.template('listHeader'),
+				//	Uses a ajax loaded template
+				LABEL(m.template(data.inputTmpl(), data)),
+				UL( {class: "listy"}, [
+					data.links.map(function(link) {
+						//	Template function for items
+						return m.template(data.listItem, link);
+					})
+				])
+			]);
+		}
+	});
+</script>
+
+<script>
+	//	Setup our tests
+	var startTests = function(tmpl){
+		//	Compile template for testing
+		var tpl = m.template.compile('list', data);
+
+		QUnit.test( "Template compiled as expected", function( assert ) {
+			expect(5);
+			deepEqual(tpl.children[0].tag, "h1", "Header tag");
+			deepEqual(tpl.children[1].tag, "label", "Header tag");
+			deepEqual(tpl.children[2].tag, "ul", "UL tag");
+			deepEqual(tpl.children[2].children[0][0].tag, "li", "LI tag");
+			deepEqual(tpl.children[2].children[0][0].children.tag, "a", "A tag");
+		});
+	};
+
+	//	Load and create our data
+	var data = {
+		links: [
+			{ href: "#", title: "Link 1", shown: m.prop(true) },
+			{ href: "#", title: "Link 2", shown: m.prop(true) },
+			{ href: "#", title: "Link 3", shown: m.prop(true) }
+		],
+		//	Inline template for list items
+		//	Note: normally defined somewhere in a controller
+		listItem: function(data){
+			with(m.sugarTags) {
+				return LI({class: data.shown()?"":"hide"},
+					A({href: data.href}, data.title)
+				)
+			};
+		},
+		//	When ajax loaded, start our tests
+		inputTmpl: m.template.load("input.tmpl.js")
+			.then(startTests)
+	};
+</script>
+
+</body>
+</html>
