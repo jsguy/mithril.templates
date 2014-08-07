@@ -1,0 +1,35 @@
+<html>
+<head>
+	<title></title>
+	<script src="../mithril.js"></script>
+	<script src="../mithril.sugartags.js"></script>
+	<script src="../mithril.templates.js"></script>
+</head>
+<body>
+
+<div id="content"></div>
+
+<!-- Embedded - also using sugar tags --> 
+<script id="myHeader" type="text/mithrill">
+	H1("Hello " + data.model.name())
+</script>
+
+<script>
+	var app = {
+		model: {
+			name: m.prop("World")
+		},
+		controller: function() {
+			this.model = app.model;
+		},
+		view: function(ctrl) {
+			return [
+				m.template("myHeader", ctrl)
+			];
+		}
+	};
+
+	m.module(document.getElementById("content"), app);
+</script>
+</body>
+</html>

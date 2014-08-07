@@ -1,0 +1,33 @@
+<html>
+<head>
+	<title></title>
+	<script src="../mithril.js"></script>
+	<script src="../mithril.templates.js"></script>
+</head>
+<body>
+
+<div id="content"></div>
+
+<script>
+	m.template.define('myHeader', function(data){
+		return m("h1","Hello " + data.model.name());
+	});
+</script>
+
+<script>
+	var app = {
+		model: {
+			name: m.prop("World")
+		},
+		controller: function() {
+			this.model = app.model;
+		},
+		view: function(ctrl) {
+			return m.template.compile("myHeader", ctrl);
+		}
+	};
+
+	m.module(document.getElementById("content"), app);
+</script>
+</body>
+</html>
