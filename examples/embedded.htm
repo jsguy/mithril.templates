@@ -1,17 +1,16 @@
 <html>
 <head>
 	<title></title>
-	<script src="../mithril.js"></script>
-	<script src="../mithril.sugartags.js"></script>
+	<script src="mithril.js"></script>
 	<script src="../mithril.templates.js"></script>
 </head>
 <body>
 
 <div id="content"></div>
 
-<!-- Embedded - also using sugar tags --> 
+<!-- Embedded --> 
 <script id="myHeader" type="text/mithrill">
-	H1("Hello " + data.model.name())
+	m("h1", "Hello " + data.model.name())
 </script>
 
 <script>

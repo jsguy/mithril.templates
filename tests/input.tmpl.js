@@ -1,4 +1,4 @@
 [
-	INPUT({type: 'checkbox', onclick: data.hideLinks}),
-	SPAN("Hide links")
+	m("inut", {type: 'checkbox', onclick: data.hideLinks}),
+	m("span", "Hide links")
 ]

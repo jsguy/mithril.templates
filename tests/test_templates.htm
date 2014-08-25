@@ -1,8 +1,7 @@
 <html>
 <head>
 	<title></title>
-	<script src="../mithril.js"></script>
-	<script src="../mithril.sugartags.js"></script>
+	<script src="mithril.js"></script>
 	<script src="../mithril.templates.js"></script>
 	<script src="lib/qunit.js"></script>
 	<link rel="stylesheet" type="text/css" href="lib/qunit.css">
@@ -14,26 +13,24 @@
 
 <!-- Header template (embedded) -->
 <script id="listHeader" type="text/mithrill">
-	H1("Mithril templates")
+	m("h1", "Mithril templates")
 </script>
 
 <!-- Main template (embedded and defined) -->
 <script>
 	m.template.define('list', function(data){
-		with(m.sugarTags) {
-			return DIV([
-				//	Use an embedded template for the header
-				m.template('listHeader'),
-				//	Uses a ajax loaded template
-				LABEL(m.template(data.inputTmpl(), data)),
-				UL( {class: "listy"}, [
-					data.links.map(function(link) {
-						//	Template function for items
-						return m.template(data.listItem, link);
-					})
-				])
-			]);
-		}
+		return m("div",[
+			//	Use an embedded template for the header
+			m.template('listHeader'),
+			//	Uses a ajax loaded template
+			m("label", m.template(data.inputTmpl(), data)),
+			m("ul", {class: "listy"}, [
+				data.links.map(function(link) {
+					//	Template function for items
+					return m.template(data.listItem, link);
+				})
+			])
+		]);
 	});
 </script>
 
@@ -63,11 +60,9 @@
 		//	Inline template for list items
 		//	Note: normally defined somewhere in a controller
 		listItem: function(data){
-			with(m.sugarTags) {
-				return LI({class: data.shown()?"":"hide"},
-					A({href: data.href}, data.title)
-				)
-			};
+			return m("li", {class: data.shown()?"":"hide"},
+				m("a", {href: data.href}, data.title)
+			)
 		},
 		//	When ajax loaded, start our tests
 		inputTmpl: m.template.load("input.tmpl.js")

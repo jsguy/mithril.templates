@@ -27,6 +27,7 @@
 			return result;
 		} catch(e){
 			var msg = e.message;
+			console.log(msg);
 			return "Mithril template error: " + msg + ".";
 		}
 	};
