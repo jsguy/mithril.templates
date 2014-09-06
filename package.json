@@ -1,0 +1,9 @@
+{
+	"name": "mithril.templates",
+	"version": "0.0.1",
+	"description": "Mithril templates - add templates in the controller, inside the dom or loaded via ajax, all able to be nested.",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jsguy/mithril.templates.git"
+	},
+}
